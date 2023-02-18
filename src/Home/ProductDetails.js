@@ -1,28 +1,46 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useLoaderData } from 'react-router-dom';
+import { AuthContext } from '../Context/AuthProvider';
 
 const ProductDetails = () => {
     const { register, handleSubmit, reset } = useForm();
+    const { user } = useContext(AuthContext)
     const { title, photoURL, description, category, _id, price } = useLoaderData();
+    const [reviews, setReviews] = useState([])
     const handleDetailsProduct = () => {
 
     }
     const handleReview = (data) => {
         console.log(data);
-        fetch(`http://localhost:5000/reviews/${_id}`, {
-            method: 'PUT',
+        const review = {
+            message: data.review,
+            name: user?.displayName || 'No name',
+            photoURL: user?.photoURL || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',
+            product: _id
+        }
+
+        fetch(`http://localhost:5000/reviews`, {
+            method: 'POST',
             headers: {
                 'content-type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(review)
         })
             .then(res => res.json())
             .then(data => {
                 console.log(data)
             })
             .catch(error => console.error(error))
-    }
+    };
+    useEffect(() => {
+        fetch(`http://localhost:5000/reviews/${_id}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                setReviews(data)
+            })
+    }, [])
     return (
         <div className='flex justify-center'>
             <div className="card w-1/2 bg-base-100 shadow-xl">
@@ -55,18 +73,20 @@ const ProductDetails = () => {
                 </div>
                 <div className='mt-8 ml-10'>
                     <h2 className='text-xl mb-2'>All reviews</h2>
-                    <div className='border-2 border-slate-600 rounded-md p-5 mb-10 mr-10'>
-                        <div className='flex justify-items-center mb-5'>
-                            <img className='rounded-full h-12 w-12 mr-3' src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSc4bnfG3zNmNB6Dk4C3vge8FxKkdFH64E96jiW8FKdS_04gDdF" alt="" />
-                            <div className=''>
-                                <span className='font-semibold mb-0'>Salah</span>
-                                <br />
-                                <span className='mt-0'>Egypt</span>
-                            </div>
+                    {
+                        reviews.map(review => <div className='border-2 border-slate-600 rounded-md p-5 mb-10 mr-10'>
+                            <div className='flex justify-items-center mb-5'>
+                                <img className='rounded-full h-12 w-12 mr-3' src={review?.photoURL} alt="" />
+                                <div className=''>
+                                    <span className='font-semibold mb-0'>{review?.name}</span>
+                                    <br />
+                                    <span className='mt-0'>Egypt</span>
+                                </div>
 
-                        </div>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro excepturi repellat, corrupti recusandae sed delectus inventore voluptatum, impedit officia ipsam quasi, eveniet assumenda? Provident repudiandae iusto, molestias nemo obcaecati omnis ducimus ratione aspernatur nesciunt blanditiis quisquam tempore a sunt odio distinctio quia quas rem repellendus exercitationem delectus quae! Consectetur, laborum.</p>
-                    </div>
+                            </div>
+                            <p>{review?.message}</p>
+                        </div>)
+                    }
                 </div>
             </div>
         </div>
