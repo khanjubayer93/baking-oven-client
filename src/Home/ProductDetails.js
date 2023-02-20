@@ -14,7 +14,8 @@ const ProductDetails = () => {
     const handleReview = (data) => {
         console.log(data);
         const review = {
-            message: data.review,
+            message: data.review || 'No location',
+            location: data.location,
             name: user?.displayName || 'No name',
             photoURL: user?.photoURL || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',
             product: _id
@@ -30,6 +31,7 @@ const ProductDetails = () => {
             .then(res => res.json())
             .then(data => {
                 console.log(data)
+                reset();
             })
             .catch(error => console.error(error))
     };
@@ -80,7 +82,7 @@ const ProductDetails = () => {
                                 <div className=''>
                                     <span className='font-semibold mb-0'>{review?.name}</span>
                                     <br />
-                                    <span className='mt-0'>Egypt</span>
+                                    <span className='mt-0'>{review?.location}</span>
                                 </div>
 
                             </div>

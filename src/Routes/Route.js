@@ -5,6 +5,8 @@ import Main from "../Layout/Main";
 import Checkout from "../Pages/Checkout";
 import CreateProduct from "../Pages/CreateProduct";
 import Login from "../Pages/Login";
+import Orders from "../Pages/Orders";
+import Payment from "../Pages/Payment";
 import Signup from "../Pages/Signup";
 import UpdateProduct from "../Pages/UpdateProduct";
 import PrivateRoute from "./PrivateRoute";
@@ -44,6 +46,14 @@ export const router = createBrowserRouter([
                 path: '/checkout/:id',
                 element: <Checkout></Checkout>,
                 loader: ({ params }) => fetch(`http://localhost:5000/products/${params.id}`)
+            },
+            {
+                path: '/orders',
+                element: <PrivateRoute><Orders></Orders></PrivateRoute>
+            },
+            {
+                path: '/payment/:id',
+                element: <Payment></Payment>
             }
         ]
     }

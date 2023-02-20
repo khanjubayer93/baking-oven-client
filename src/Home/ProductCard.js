@@ -7,7 +7,7 @@ const ProductCard = ({ product }) => {
         console.log(id);
     }
     return (
-        <div className="card w-full bg-base-100 shadow-xl">
+        <Link to={`/productDetails/${_id}`} className="card w-full bg-base-100 shadow-xl">
             <figure className="px-10 pt-10">
                 <img src={photoURL} alt="Shoes" className="rounded-xl" />
             </figure>
@@ -31,7 +31,7 @@ const ProductCard = ({ product }) => {
                     </Link>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 };
 

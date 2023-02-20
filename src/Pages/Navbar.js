@@ -40,6 +40,7 @@ const Navbar = () => {
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">
                         <li><Link to='/'>Home</Link></li>
+                        <li><Link to='/orders'>Orders</Link></li>
                         <li><Link to='/createProduct'>Add Product</Link></li>
                         {
                             user?.uid ?
@@ -49,8 +50,7 @@ const Navbar = () => {
 
                                     <div className="tooltip tooltip-bottom" data-tip={user?.displayName && user?.displayName}>
                                         {
-                                            user.photoURL &&
-                                            <img className='w-10 h-10 rounded-full ml-3' src={user?.photoURL} alt="" />
+                                            <img className='w-10 h-10 rounded-full ml-3' src={user?.photoURL} alt="" /> || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'
 
                                         }
                                     </div>

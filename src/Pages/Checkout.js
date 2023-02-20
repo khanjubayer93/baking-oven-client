@@ -18,9 +18,10 @@ const Checkout = () => {
             price,
             serviceName: title,
             address: data.address,
-            message: data.message
+            message: data.message,
+            email: data.email
         }
-        fetch('http://localhost:5000/services', {
+        fetch('http://localhost:5000/orders', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'

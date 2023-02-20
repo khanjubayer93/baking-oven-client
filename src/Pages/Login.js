@@ -9,17 +9,32 @@ const Login = () => {
     const { signinUser, user } = useContext(AuthContext);
     const location = useLocation();
     const navigate = useNavigate();
-    const  from = location.state?.from?.pathname || "/";
+    const from = location.state?.from?.pathname || "/";
 
 
     const handleOnSubmit = data => {
         signinUser(data.email, data.password)
             .then((userCredential) => {
                 const user = userCredential.user;
-                console.log(user)
-                navigate(from, { replace: true });
-                toast.success('User signed id successfully')
-                reset()
+
+                const currentUser = {
+                    email: user.email
+                }
+                fetch('http://localhost:5000/jwt', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(currentUser)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        localStorage.setItem('baking-token', data.token)
+                    })
+                // navigate(from, { replace: true });
+                // toast.success('User signed id successfully')
+                // reset()
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -27,7 +42,7 @@ const Login = () => {
                 console.error(errorCode, errorMessage)
             });
     };
-    
+
     return (
         <div className='text-center'>
             <form onSubmit={handleSubmit(handleOnSubmit)}>
